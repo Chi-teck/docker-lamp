@@ -7,7 +7,7 @@ ENV DUMB_INIT_VERSION=1.2.4 \
     MHSENDMAIL_VERSION=v0.2.0 \
     BAT_VERSION=0.17.1 \
     TASK_VERSION=v3.0.1 \
-    PHP_VERSION=8.0 \
+    PHP_VERSION=7.4 \
     NODEJS_VERSION=15 \
     SYMFONY_CLI_VERSION=4.21.3 \
     HOST_USER_NAME=lamp \
@@ -63,7 +63,8 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php$PHP_VERSION-gd \
     php$PHP_VERSION-mbstring \
     php$PHP_VERSION-cgi \
-    php-apcu \
+    php$PHP_VERSION-json \
+    php$PHP_VERSION-apcu \
     php$PHP_VERSION-intl \
     php$PHP_VERSION
 
@@ -159,10 +160,9 @@ RUN a2ensite phpmyadmin
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 # Install Symfony console autocomplete.
-# @todo Enable it once https://github.com/bamarni/symfony-console-autocomplete/pull/60 is merged.
-#RUN mkdir /opt/symfony-console-autocomplete && \
-#    composer --working-dir=/opt/symfony-console-autocomplete require bamarni/symfony-console-autocomplete:dev-master && \
-#    ln -s /opt/symfony-console-autocomplete/vendor/bin/symfony-autocomplete /usr/local/bin/symfony-autocomplete
+RUN mkdir /opt/symfony-console-autocomplete && \
+    composer --working-dir=/opt/symfony-console-autocomplete require bamarni/symfony-console-autocomplete:dev-master && \
+    ln -s /opt/symfony-console-autocomplete/vendor/bin/symfony-autocomplete /usr/local/bin/symfony-autocomplete
 
 # Install Symfony binary.
 RUN wget -O /tmp/symfony.gz https://github.com/symfony/cli/releases/download/v${SYMFONY_CLI_VERSION}/symfony_linux_amd64.gz && \
@@ -183,8 +183,7 @@ RUN mkdir /opt/php-cs-fixer && \
     ln -s /opt/php-cs-fixer/vendor/bin/php-cs-fixer /usr/local/bin/php-cs-fixer
 
 # Install Composer completions.
-# @todo Enable it once symfony-autocomplete supports PHP 8.
-# RUN SHELL=/bin/bash symfony-autocomplete composer  > /etc/bash_completion.d/dcomposer_complete.sh
+RUN SHELL=/bin/bash symfony-autocomplete composer  > /etc/bash_completion.d/dcomposer_complete.sh
 
 # Install Bat.
 RUN wget -P /tmp https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat-musl_${BAT_VERSION}_amd64.deb && \
