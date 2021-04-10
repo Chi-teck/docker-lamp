@@ -13,10 +13,22 @@ fi
 
 nohup mailhog &
 
-service apache2 start && xdebug off
+if [[ $SERVER == 'apache' ]]; then
+  echo 'Starting apache...'
+  service apache2 start
+  LOG=/var/log/nginx/access.log
+else
+  echo 'Starting nginx...'
+  service nginx start
+  echo "Starting php$PHP_VERSION-fpm..."
+  service php$PHP_VERSION-fpm start
+  LOG=/var/log/apache2/access.log
+fi
+
+xdebug off
 
 service mariadb start
 
 service ssh start
 
-tail -f /var/log/apache2/access.log
+tail -f $LOG

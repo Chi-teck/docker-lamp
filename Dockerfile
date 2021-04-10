@@ -16,6 +16,7 @@ ENV DUMB_INIT_VERSION=1.2.5 \
     MYSQL_ROOT_PASSWORD=123 \
     TIMEZONE=Europe/Moscow \
     DEBIAN_FRONTEND=noninteractive \
+    SERVER=apache \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
@@ -52,10 +53,12 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     less \
     bash-completion \
     apache2 \
+    nginx \
     mariadb-server \
     mariadb-client \
     libapache2-mod-php$PHP_VERSION \
     php-xdebug \
+    php$PHP_VERSION-fpm \
     php$PHP_VERSION-xml \
     php$PHP_VERSION-mysql \
     php$PHP_VERSION-sqlite3 \
@@ -84,9 +87,12 @@ RUN bash /root/request-ssl.sh && rm root/request-ssl.sh
 RUN a2enmod rewrite ssl
 
 # Update default Apache configuration.
-COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+COPY sites-available/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY sites-available/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 RUN a2ensite default-ssl.conf
+
+# Update default Nginx configuration.
+COPY sites-available/nginx/default /etc/nginx/sites-available/default
 
 # Set server name.
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
@@ -102,7 +108,8 @@ COPY 30-local-cli.ini /etc/php/$PHP_VERSION/cli/conf.d/30-local.ini
 
 # Install Xdebug manager.
 COPY xdebug.sh /usr/local/bin/xdebug
-RUN chmod +x /usr/local/bin/xdebug
+RUN chmod +x /usr/local/bin/xdebug && \
+    sed -i "s/%PHP_VERSION%/$PHP_VERSION/g" /usr/local/bin/xdebug
 
 # Create host user.
 RUN useradd $HOST_USER_NAME -m -u$HOST_USER_UID -Gsudo -s /bin/bash && \
@@ -149,8 +156,13 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/$PHPMYADMIN_VERSION/phpMyAdmin-
     rm phpMyAdmin-$PHPMYADMIN_VERSION-all-languages.zip
 COPY config.inc.php /usr/share/phpmyadmin/config.inc.php
 RUN sed -i "s/root_pass/$MYSQL_ROOT_PASSWORD/" /usr/share/phpmyadmin/config.inc.php
-COPY sites-available/phpmyadmin.conf /etc/apache2/sites-available/phpmyadmin.conf
+COPY sites-available/apache/phpmyadmin.conf /etc/apache2/sites-available/phpmyadmin.conf
 RUN a2ensite phpmyadmin
+
+COPY sites-available/nginx/phpmyadmin /etc/nginx/sites-available/phpmyadmin
+RUN sed -i "s/%PHP_VERSION%/$PHP_VERSION/g" /etc/nginx/sites-available/phpmyadmin && \
+    ln -s /etc/nginx/sites-available/phpmyadmin /etc/nginx/sites-enabled/phpmyadmin
+
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -170,7 +182,6 @@ RUN mkdir /opt/var-dumper && \
     composer --working-dir=/opt/var-dumper require symfony/var-dumper:^5.0 && \
     composer --working-dir=/opt/var-dumper require symfony/console:^5.0 && \
     ln -s /opt/var-dumper/vendor/bin/var-dump-server /usr/local/bin/var-dump-server
-RUN mkdir /usr/share/php
 COPY dumper.php /usr/share/php
 
 # Install PHP coding standards Fixer.
