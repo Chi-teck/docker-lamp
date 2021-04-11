@@ -171,10 +171,9 @@ RUN sed -i "s/%PHP_VERSION%/$PHP_VERSION/g" /etc/nginx/sites-available/phpmyadmi
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 # Install Symfony console autocomplete.
-# @todo Enable it once https://github.com/bamarni/symfony-console-autocomplete/pull/60 is merged.
-#RUN mkdir /opt/symfony-console-autocomplete && \
-#    composer --working-dir=/opt/symfony-console-autocomplete require bamarni/symfony-console-autocomplete:dev-master && \
-#    ln -s /opt/symfony-console-autocomplete/vendor/bin/symfony-autocomplete /usr/local/bin/symfony-autocomplete
+RUN mkdir /opt/symfony-console-autocomplete && \
+    composer --working-dir=/opt/symfony-console-autocomplete require bamarni/symfony-console-autocomplete:dev-master && \
+    ln -s /opt/symfony-console-autocomplete/vendor/bin/symfony-autocomplete /usr/local/bin/symfony-autocomplete
 
 # Install Symfony binary.
 RUN wget -O /tmp/symfony.gz https://github.com/symfony/cli/releases/download/v${SYMFONY_CLI_VERSION}/symfony_linux_amd64.gz && \
@@ -194,8 +193,7 @@ RUN mkdir /opt/php-cs-fixer && \
     ln -s /opt/php-cs-fixer/vendor/bin/php-cs-fixer /usr/local/bin/php-cs-fixer
 
 # Install Composer completions.
-# @todo Enable it once symfony-autocomplete supports PHP 8.
-# RUN SHELL=/bin/bash symfony-autocomplete composer  > /etc/bash_completion.d/dcomposer_complete.sh
+RUN SHELL=/bin/bash symfony-autocomplete composer  > /etc/bash_completion.d/dcomposer_complete.sh
 
 # Install Bat.
 RUN wget -P /tmp https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat-musl_${BAT_VERSION}_amd64.deb && \
