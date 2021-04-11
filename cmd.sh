@@ -13,6 +13,8 @@ fi
 
 nohup mailhog &
 
+sed -i "s/%SERVER%/$SERVER/g" /usr/local/bin/xdebug
+
 if [[ $SERVER == 'apache' ]]; then
   echo 'Starting apache...'
   service apache2 start
