@@ -5,6 +5,9 @@ if [[ $EUID != 0 ]]; then
   exit 1
 fi
 
+# This value is set in cmd.sh
+SERVER='%SERVER%'
+
 if [[ $1 == 'on' ]]; then
   if [[ $SERVER == 'apache' ]]; then
     # Apache fails with "signal Segmentation fault" when reload is used.
