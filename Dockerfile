@@ -60,6 +60,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php-xdebug \
     php$PHP_VERSION-fpm \
     php$PHP_VERSION-xml \
+    php$PHP_VERSION-zip \
     php$PHP_VERSION-mysql \
     php$PHP_VERSION-sqlite3 \
     php$PHP_VERSION-curl \
