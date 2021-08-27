@@ -62,6 +62,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php$PHP_VERSION-xml \
     php$PHP_VERSION-mysql \
     php$PHP_VERSION-sqlite3 \
+    php$PHP_VERSION-zip \
     php$PHP_VERSION-curl \
     php$PHP_VERSION-gd \
     php$PHP_VERSION-mbstring \
