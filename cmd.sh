@@ -15,7 +15,7 @@ nohup mailhog &
 
 service apache2 start && xdebug off
 
-service mysql start
+service mariadb start
 
 service ssh start
 

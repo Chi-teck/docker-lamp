@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 # Set variables.
 ENV DUMB_INIT_VERSION=1.2.4 \
@@ -93,12 +93,8 @@ RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
 # Configure MySQL.
 RUN sed -i "s/bind-address/#bind-address/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
-    sed -i "s/password =/password = $MYSQL_ROOT_PASSWORD/" /etc/mysql/debian.cnf && \
-    service mysql start && \
-    mysql -uroot -e"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')" && \
-    mysql -uroot -e"UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE user = 'root'" && \
-    mysql -uroot -e"GRANT ALL ON *.* TO 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD'" && \
-    mysql -uroot -e"FLUSH PRIVILEGES"
+    service mariadb start && \
+    mysql -uroot -e"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')"
 
 # Override some PHP settings.
 COPY 30-local-apache2.ini /etc/php/$PHP_VERSION/apache2/conf.d/30-local.ini
@@ -114,7 +110,7 @@ RUN useradd $HOST_USER_NAME -m -u$HOST_USER_UID -Gsudo -s /bin/bash && \
 
 # Install dot files.
 COPY vimrc /etc/vim/vimrc.local 
-COPY vim/colors/termschool.vim /usr/share/vim/vim81/colors
+COPY vim/colors/termschool.vim /usr/share/vim/vim82/colors
 COPY gitconfig /etc/gitconfig
 COPY config /home/$HOST_USER_NAME/.config
 RUN sed -i "s/%USER%/$HOST_USER_NAME/g" /home/$HOST_USER_NAME/.config/mc/hotlist && \
