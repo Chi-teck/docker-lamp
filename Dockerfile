@@ -116,7 +116,7 @@ RUN useradd $HOST_USER_NAME -m -u$HOST_USER_UID -Gsudo -s /bin/bash && \
 
 # Install dot files.
 COPY vimrc /etc/vim/vimrc.local 
-COPY vim/colors/termschool.vim /usr/share/vim/vim81/colors
+COPY vim/colors/termschool.vim /usr/share/vim/vim82/colors
 COPY gitconfig /etc/gitconfig
 COPY config /home/$HOST_USER_NAME/.config
 RUN sed -i "s/%USER%/$HOST_USER_NAME/g" /home/$HOST_USER_NAME/.config/mc/hotlist && \
