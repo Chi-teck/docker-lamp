@@ -93,6 +93,7 @@ RUN a2ensite default-ssl.conf
 
 # Update default Nginx configuration.
 COPY sites-available/nginx/default /etc/nginx/sites-available/default
+RUN sed -i "s/%PHP_VERSION%/$PHP_VERSION/g" /etc/nginx/sites-available/default
 
 # Set server name.
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
@@ -162,7 +163,6 @@ RUN a2ensite phpmyadmin
 COPY sites-available/nginx/phpmyadmin /etc/nginx/sites-available/phpmyadmin
 RUN sed -i "s/%PHP_VERSION%/$PHP_VERSION/g" /etc/nginx/sites-available/phpmyadmin && \
     ln -s /etc/nginx/sites-available/phpmyadmin /etc/nginx/sites-enabled/phpmyadmin
-
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
