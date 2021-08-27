@@ -57,7 +57,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     mariadb-server \
     mariadb-client \
     libapache2-mod-php$PHP_VERSION \
-    php-xdebug \
+    php$PHP_VERSION-xdebug \
     php$PHP_VERSION-fpm \
     php$PHP_VERSION-xml \
     php$PHP_VERSION-mysql \
@@ -104,7 +104,8 @@ RUN sed -i "s/bind-address/#bind-address/" /etc/mysql/mariadb.conf.d/50-server.c
     mysql -uroot -e"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')"
 
 # Override some PHP settings.
-COPY 30-local-apache2.ini /etc/php/$PHP_VERSION/apache2/conf.d/30-local.ini
+COPY 30-local-web.ini /etc/php/$PHP_VERSION/apache2/conf.d/30-local.ini
+COPY 30-local-web.ini /etc/php/$PHP_VERSION/fpm/conf.d/30-local.ini
 COPY 30-local-cli.ini /etc/php/$PHP_VERSION/cli/conf.d/30-local.ini
 
 # Install Xdebug manager.
