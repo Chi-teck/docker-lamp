@@ -101,7 +101,8 @@ RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 # Configure MySQL.
 RUN sed -i "s/bind-address/#bind-address/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
     service mariadb start && \
-    mysql -uroot -e"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')"
+    mysql -uroot -e"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD')" && \
+    mysql -uroot -e"GRANT ALL ON *.* TO 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD'"
 
 # Override some PHP settings.
 COPY 30-local-web.ini /etc/php/$PHP_VERSION/apache2/conf.d/30-local.ini
