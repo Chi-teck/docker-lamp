@@ -19,7 +19,7 @@ elif [[ $1 == 'off' ]]; then
   if [[ $SERVER == 'apache' ]]; then
     phpdismod -v %PHP_VERSION% xdebug && service apache2 restart
   else
-    phpdismod -v %PHP_VERSION% && service php%PHP_VERSION%-fpm reload
+    phpdismod -v %PHP_VERSION% xdebug && service php%PHP_VERSION%-fpm reload
   fi
 else
   >&2 echo 'Usage:' $(basename -- "$0") '[on|off]';
