@@ -6,10 +6,11 @@ ENV DUMB_INIT_VERSION=1.2.5 \
     MAILHOG_VERSION=v1.0.1 \
     MHSENDMAIL_VERSION=v0.2.0 \
     BAT_VERSION=0.18.3 \
-    TASK_VERSION=v3.7.0 \
+    TASK_VERSION=v3.10.0 \
+    JQ_VERSION=1.6 \
     PHP_VERSION=8.1 \
     NODEJS_VERSION=16 \
-    SYMFONY_CLI_VERSION=4.25.5 \
+    SYMFONY_CLI_VERSION=4.27.7 \
     HOST_USER_NAME=lamp \
     HOST_USER_UID=1000 \
     HOST_USER_PASSWORD=123 \
@@ -150,7 +151,7 @@ RUN wget https://github.com/mailhog/MailHog/releases/download/$MAILHOG_VERSION/M
     mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
 # Install jq.
-RUN wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && \
+RUN wget https://github.com/stedolan/jq/releases/download/jq-$JQ_VERSION/jq-linux64 && \
     chmod +x jq-linux64 && mv jq-linux64 /usr/local/bin/jq
 
 # Install PhpMyAdmin.
