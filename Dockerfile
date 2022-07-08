@@ -172,9 +172,8 @@ RUN mkdir /opt/symfony-console-autocomplete && \
     ln -s /opt/symfony-console-autocomplete/vendor/bin/symfony-autocomplete /usr/local/bin/symfony-autocomplete
 
 # Install Symfony binary.
-RUN wget -O /tmp/symfony.gz https://github.com/symfony/cli/releases/download/v${SYMFONY_CLI_VERSION}/symfony_linux_amd64.gz && \
-    gunzip /tmp/symfony.gz && mv /tmp/symfony /usr/local/bin/symfony && \
-    chmod +x /usr/local/bin/symfony
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash && \
+    apt update && apt install symfony-cli
 
 # Install VarDumper Component.
 RUN mkdir /opt/var-dumper && \
