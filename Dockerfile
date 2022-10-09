@@ -209,6 +209,10 @@ RUN apt-get update && apt-get install -y curl apt-transport-https && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get install -y yarn
 
+
+# Install local tunnel.
+RUN npm install -g localtunnel
+
 # Preserve default MySQL data.
 RUN mkdir /var/lib/mysql_default && cp -R /var/lib/mysql/* /var/lib/mysql_default
 
