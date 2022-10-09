@@ -67,6 +67,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php$PHP_VERSION-curl \
     php$PHP_VERSION-gd \
     php$PHP_VERSION-mbstring \
+    php$PHP_VERSION-bcmath \
     php$PHP_VERSION-cgi \
     php-apcu \
     php$PHP_VERSION-intl \
