@@ -72,6 +72,8 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php-apcu \
     php$PHP_VERSION-intl \
     php$PHP_VERSION
+RUN sudo update-alternatives --set php /usr/bin/php8.1
+
 
 # Install dumb-init.
 RUN wget https://github.com/Yelp/dumb-init/releases/download/v$DUMB_INIT_VERSION/dumb-init_"$DUMB_INIT_VERSION"_amd64.deb && \
