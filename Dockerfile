@@ -8,7 +8,7 @@ ENV DUMB_INIT_VERSION=1.2.5 \
     BAT_VERSION=0.22.1 \
     TASK_VERSION=v3.19.0 \
     JQ_VERSION=1.6 \
-    PHP_VERSION=8.1 \
+    PHP_VERSION=8.2 \
     NODEJS_VERSION=18 \
     SYMFONY_CLI_VERSION=5.4.10 \
     HOST_USER_NAME=lamp \
@@ -72,7 +72,6 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils \
     php-apcu \
     php$PHP_VERSION-intl \
     php$PHP_VERSION
-RUN sudo update-alternatives --set php /usr/bin/php8.1
 
 
 # Install dumb-init.
