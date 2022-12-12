@@ -18,13 +18,13 @@ sed -i "s/%SERVER%/$SERVER/g" /usr/local/bin/xdebug
 if [[ $SERVER == 'apache' ]]; then
   echo 'Starting apache...'
   service apache2 start
-  LOG=/var/log/nginx/access.log
+  LOG=/var/log/apache2/access.log
 else
   echo 'Starting nginx...'
   service nginx start
   echo "Starting php$PHP_VERSION-fpm..."
   service php$PHP_VERSION-fpm start
-  LOG=/var/log/apache2/access.log
+  LOG=/var/log/nginx/access.log
 fi
 
 xdebug off
